@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Is this website safe?</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #222;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #333;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
+            color: #eee;
+            text-align: center;
+            animation: fadein 1s;
+            width: 70%;
+            max-width: 600px;
+        }
+        h1 {
+            color: #eee;
+            text-align: center;
+            font-size: 28px;
+        }
+        input[type="text"] {
+            padding: 15px;
+            border-radius: 10px;
+            border: none;
+            width: 100%;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        button[type="submit"] {
+            padding: 15px 30px;
+            border-radius: 10px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 18px;
+        }
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 30px;
+            font-size: 20px;
+        }
+        .safe {
+            color: #5cb85c;
+        }
+        .unsafe {
+            color: #d9534f;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        @keyframes fadein {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">Is this website safe?</div>
+        <p>"Is this website safe?" is a website security checking tool based on a constantly updated database to improve the tool's accuracy over time.</p>
+            <p>Currently, this tool is in development. If you have any suggestions, please send them to:</p> 
+            <a href="mailto:isthiswebsitesafe.email@gmail.com">isthiswebsitesafe.email@gmail.com</a>
+        <p>(Remember to copy the URL of the site that appears in the browser bar for a more accurate check)</p>
+        <form id="siteForm">
+            <input type="text" id="siteInput" placeholder="Enter the website URL...">
+            <br>
+            <button type="submit">Check</button>
+        </form>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('siteForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var siteUrl = document.getElementById('siteInput').value;
+            checkSiteSafety(siteUrl);
+        });
+
+        function checkSiteSafety(siteUrl) {
+            // List of sites considered safe
+            var safeSites = [
+"www.google.com", "www.youtube.com", "www.facebook.com", "www.amazon.com", "www.twitter.com",
+"www.netflix.com", "www.linkedin.com", "www.microsoft.com", "www.wikipedia.org", "www.instagram.com",
+"www.reddit.com", "www.github.com", "www.apple.com", "www.dropbox.com", "www.paypal.com",
+"www.ebay.com", "www.spotify.com", "www.pinterest.com", "www.slack.com", "www.stackoverflow.com",
+"www.bbc.com", "www.cnn.com", "www.theguardian.com", "www.npr.org", "www.reuters.com",
+"www.aljazeera.com", "www.apnews.com", "www.nytimes.com", "www.washingtonpost.com", "www.ft.com",
+"www.bloomberg.com", "www.forbes.com", "www.fortune.com", "www.businessinsider.com", "www.entrepreneur.com",
+"www.wikipedia.org", "www.medium.com", "www.slack.com", "www.bitbucket.org", "www.wetransfer.com",
+"www.zoom.us", "www.duckduckgo.com", "www.protonmail.com", "www.authy.com", "www.lastpass.com",
+"www.tutanota.com", "www.signal.org", "www.wireguard.com", "www.keepassxc.org", "www.firefox.com",
+"www.brave.com", "www.torproject.org", "www.veracrypt.fr", "www.nordvpn.com", "www.1password.com",
+"www.dashlane.com", "www.vpnbook.com", "www.expressvpn.com", "www.bleepingcomputer.com", "www.pcmag.com",
+"www.cnet.com", "www.theverge.com", "www.wired.com", "www.techcrunch.com", "www.arstechnica.com",
+"www.howtogeek.com", "www.digitaltrends.com", "www.androidauthority.com", "www.tomshardware.com",
+"www.makeuseof.com", "www.lifehacker.com", "www.github.com", "www.stackoverflow.com", "www.codecademy.com",
+"www.khanacademy.org", "www.coursera.org", "www.edx.org", "www.udemy.com", "www.ted.com",
+"www.nationalgeographic.com", "www.bbc.com/news", "www.cnn.com", "www.theguardian.com", "www.npr.org",
+"www.reuters.com", "www.aljazeera.com", "www.apnews.com", "www.nytimes.com", "www.washingtonpost.com",
+"www.ft.com", "www.bloomberg.com", "www.forbes.com", "www.fortune.com", "www.businessinsider.com",
+"www.entrepreneur.com","www.weather.com", "www.accuweather.com", "www.nationalweather.com",
+"www.techradar.com", "www.computerworld.com", "www.pcworld.com", "www.macworld.com", "www.zdnet.com",
+"www.networkworld.com", "www.infoworld.com", "www.thehackernews.com", "www.darkreading.com", "www.schneier.com",
+"www.cyberscoop.com", "www.thecyberwire.com", "www.securelist.com", "www.securityweek.com", "www.sans.org",
+"www.us-cert.gov", "www.cisa.gov", "www.krebsonsecurity.com", "www.troyhunt.com", "www.grc.com",
+"www.eff.org", "www.aclu.org", "www.privacytools.io", "www.privacyinternational.org", "www.accessnow.org",
+"www.cdt.org", "www.derechosdigitales.org", "www.freedomofpress.org", "www.eff.org/deeplinks", "www.privacyinternational.org/news",
+"www.consumerreports.org", "www.wired.com/category/reviews", "www.tomsguide.com", "www.digitaltrends.com/reviews",
+"www.pcmag.com/reviews", "www.techradar.com/reviews", "www.cnet.com/reviews", "www.theverge.com/reviews",
+"www.nytimes.com/reviews", "www.engadget.com/reviews", "www.trustedreviews.com", "www.consumerreports.org/cro/index.htm",
+"www.reviewed.com", "www.consumersearch.com", "www.toptenreviews.com", "www.wirecutter.com", "www.which.co.uk",
+"www.choice.com.au", "www.consumerreports.org/cro/news/index.htm", "www.kbb.com", "www.edmunds.com",
+"www.autotrader.com", "www.cars.com", "www.caranddriver.com", "www.motortrend.com", "www.autoweek.com",
+"www.carfax.com", "www.autotrader.ca", "www.driving.ca", "www.jdpower.com", "www.carmax.com",
+"www.truecar.com", "www.carvana.com", "www.autolist.com", "www.kelleybluebook.com", "www.iseecars.com",
+"www.cargurus.com", "www.autoblog.com", "www.thecarconnection.com", "www.carsguide.com.au", "www.roadandtrack.com",
+"www.hotcars.com", "www.topspeed.com", "www.automobilemag.com", "www.carthrottle.com", "www.classiccars.com",
+"www.autoevolution.com", "www.motorsport.com", "www.formula1.com", "www.motogp.com", "www.nascar.com",
+"www.fia.com", "www.imsa.com", "www.wrc.com", "www.dirtgame.com", "www.motorsportweek.com",
+"www.futurism.com", "www.space.com", "www.nasa.gov", "www.spacex.com", "www.blueorigin.com",
+"www.boeing.com/space", "www.rocketlabusa.com", "www.lockheedmartin.com/space", "www.planetary.org",
+"www.spacefoundation.org", "www.thespaces.com", "www.universetoday.com", "www.spaceflightnow.com",
+"www.nasaspaceflight.com", "www.space.com/news", "www.forbes.com/space", "www.spaceflightinsider.com",
+"www.spacepolicyonline.com", "www.popularmechanics.com/space", "www.theverge.com/space", "www.spaceforce.mil",
+"www.esa.int", "www.astro.org", "www.spaceweather.com", "www.astronomy.com", "www.spaceweatherlive.com",
+"www.skyandtelescope.org", "www.heavens-above.com", "www.thespacereview.com", "www.orbitaltoday.com", "www.spaceref.com", "www.spacenews.com", "www.spacepolicyonline.com",
+"www.spacelegalissues.com", "www.airspacemag.com", "www.howstuffworks.com", "www.spaceflightfans.cn", "www.space-technology.net",
+"www.spacedaily.com", "www.spaceandtech.com", "www.spectrum.ieee.org", "www.digitalsky.org.uk", "www.cislunardevelopment.com",
+"www.spacenation.org", "www.spacenation.org", "www.n2yo.com", "www.space-track.org", "www.spaceflight101.com",
+"www.spaceflightinsider.com", "www.spacetechnology.net", "www.spaceweather.com", "www.spaceweatherlive.com",
+"www.spaceweatherarchive.com", "www.spaceweather.gc.ca", "www.nasa.gov/mission_pages/hubble/main/index.html", "www.spacex.com/launches/",
+"www.iss-casis.org", "www.spacelaunchreport.com", "www.spacelaunchschedule.com", "www.nasaspaceflight.com",
+"www.braeunig.us/space/index.html", "www.spaceflight101.com", "www.universetoday.com", "www.space.com",
+"www.spaceflightnow.com", "www.spaceref.com", "www.planetary.org", "www.spacepolicyonline.com", "www.parabolicarc.com",
+"www.spacenews.com", "www.spaceflightinsider.com", "www.collectspace.com", "www.nasawatch.com", "www.spaceflightfans.cn",
+"www.hobbyspace.com", "www.rocketlaunch.live", "www.spaceflightinsider.com", "www.spaceflightfans.cn", "www.spacenewsfeed.com",
+"www.americaspace.com", "www.thespacereview.com", "www.aviationweek.com", "www.satellite-calculations.com",
+"www.spacesafetymagazine.com", "www.spaceflightnews.blog", "www.space-explorers.com", "www.spacelaunchschedule.com",
+"www.spaceweatherlive.com", "www.spaceweathernews.com", "www.earthsky.org", "www.spaceref.com", "www.newspacewatch.com",
+"www.space.com", "www.spaceindustrynews.com", "www.spacefellowship.com", "www.spacelaw.blog", "www.spacelaw.xyz",
+"www.orbitaltoday.com", "www.satbeams.com", "www.space.skyrocket.de", "www.n2yo.com", "www.spacetravel.com",
+"www.newspace.im", "www.spaceportamericacup.com", "www.svengrahn.pp.se", "www.nss.org", "www.astronautix.com",
+"www.lizard-tail.com/islandone", "www.astronomy.com", "www.heavens-above.com", "www.spacefacts.de", "www.spacesite.info",
+"www.spaceanswers.com", "www.drewexmachina.com", "www.hobbyspace.com", "www.space.stackexchange.com", "www.thespacereview.com",
+"www.airspacemag.com", "www.spacebattles.com", "www.thespacereview.com", "www.spaceclearinghouse.org", "www.fys.kuleuven.be/ster/STER/STER.html",
+"www.meridian.org", "www.globalsecurity.org", "www.satellite-calculations.com", "www.pbs.org/space/time/index.html", "www.meridian.org",
+"www.aiaa.org", "www.spaceacademy.net.au", "www.aiaa.org", "www.marsnews.com", "www.skywise711.com", "www.meridian.org",
+"www.gandhara.rferl.org", "www.drewexmachina.com", "www.washingtonpost.com/technology/2021/03/03/perseverance-rover-mars-livestream", "www.nasaspaceflight.com", 
+"www.spacex.com/launches", "www.space.com/13896-private-spaceflight-companies-gallery.html", "www.spacex.com", "www.arianespace.com", "www.ulalaunch.com", 
+"www.rocketlabusa.com", "www.boeing.com/space", "www.blueorigin.com", "www.virgingalactic.com", "www.firefly.com", "www.northropgrumman.com", 
+"www.scaled.com", "www.orbitalatk.com", "www.masten.aero", "www.spacex.com/launches", "www.nasa.gov", "www.space.com", "www.spacex.com", 
+"www.bluorigin.com", "www.rocketlabusa.com", "www.arianespace.com", "www.ulalaunch.com", "www.isro.gov.in", "www.boeing.com/space", 
+"www.iss-casis.org", "www.virgingalactic.com", "www.firefly.com", "www.spacex.com/launches", "www.northropgrumman.com", 
+"www.spaceadventures.com", "www.nasa.gov", "www.jpl.nasa.gov", "www.nasaspaceflight.com", "www.spacex.com", "www.rocketlabusa.com", 
+"www.blueorigin.com", "www.ulalaunch.com", "www.arianespace.com", "www.boeing.com/space", "www.virgingalactic.com", "www.firefly.com", 
+"www.northropgrumman.com", "www.isro.gov.in", "www.iss-casis.org", "www.spacex.com/launches", "www.nasa.gov", "www.nasaspaceflight.com",
+"www.spaceadventures.com", "www.nasa.gov", "www.spacex.com", "www.bluorigin.com", "www.rocketlabusa.com", "www.arianespace.com", 
+"www.ulalaunch.com", "www.boeing.com/space", "www.virgingalactic.com", "www.firefly.com", "www.northropgrumman.com", "www.isro.gov.in", 
+"www.iss-casis.org", "www.spacex.com/launches", "www.nasa.gov", "www.nasa.gov", "www.jpl.nasa.gov", "www.spacex.com", "www.blueorigin.com", 
+"www.rocketlabusa.com", "www.ulalaunch.com", "www.arianespace.com", "www.boeing.com/space", "www.virgingalactic.com", "www.firefly.com", 
+"www.northropgrumman.com", "www.isro.gov.in", "www.iss-casis.org"
+,"www.wikipedia.com", "www.openai.com", "www.github.com", "www.stackoverflow.com",
+"www.kaggle.com", "www.medium.com", "www.quora.com", "www.udemy.com", "www.coursera.org",
+"www.edx.org", "www.linkedin.com", "www.twitter.com", "www.facebook.com", "www.instagram.com",
+"www.reddit.com", "www.discord.com", "www.twitch.tv", "www.netflix.com", "www.hulu.com",
+"www.amazon.com", "www.ebay.com", "www.aliexpress.com", "www.bestbuy.com", "www.target.com",
+"www.walmart.com", "www.apple.com", "www.microsoft.com", "www.google.com", "www.yahoo.com",
+"www.bing.com", "www.duckduckgo.com", "www.theguardian.com", "www.nytimes.com", "www.washingtonpost.com",
+"www.wsj.com", "www.bbc.com", "www.cnn.com", "www.aljazeera.com", "www.reuters.com",
+"www.apnews.com", "www.bloomberg.com", "www.forbes.com", "www.businessinsider.com", "www.fortune.com",
+"www.techcrunch.com", "www.engadget.com", "www.cnet.com", "www.theverge.com", "www.techradar.com",
+"www.pcmag.com", "www.macrumors.com", "www.androidcentral.com", "www.iphonehacks.com", "www.linux.com",
+"www.towardsdatascience.com", "www.analyticsvidhya.com", "www.datasciencecentral.com", "www.machinelearningmastery.com", "www.pyimagesearch.com",
+"www.deeplearning.ai", "www.fast.ai", "www.towardsai.net", "www.artificialintelligence-news.com", "www.aitimejournal.com",
+"www.technologyreview.com", "www.sciencedaily.com", "www.newscientist.com", "www.nationalgeographic.com", "www.nasa.gov",
+"www.space.com", "www.spacex.com", "www.nasa.gov/missions", "www.un.org", "www.worldbank.org",
+"www.imf.org", "www.who.int", "www.cdc.gov", "www.nih.gov", "www.webmd.com",
+"www.mayoclinic.org", "www.healthline.com", "www.medicalnewstoday.com", "www.bmj.com", "www.sciencemag.org",
+"www.nature.com", "www.sciencedirect.com", "www.pnas.org", "www.cell.com", "www.sciencemuseum.org.uk",
+"www.amnh.org", "www.exploratorium.edu", "www.si.edu", "www.louvre.fr", "www.metmuseum.org",
+"www.britishmuseum.org", "www.rijksmuseum.nl", "www.moma.org", "www.tate.org.uk", "www.nga.gov",
+"www.getty.edu", "www.vam.ac.uk", "www.nhm.ac.uk", "www.fieldmuseum.org", "www.nps.gov",
+"www.amnh.org", "www.exploratorium.edu", "www.si.edu", "www.louvre.fr", "www.metmuseum.org",
+"www.britishmuseum.org", "www.rijksmuseum.nl", "www.moma.org", "www.tate.org.uk", "www.nga.gov",
+"www.getty.edu", "www.vam.ac.uk", "www.nhm.ac.uk", "www.fieldmuseum.org", "www.nps.gov",
+"www.weforum.org", "www.unicef.org", "www.savethechildren.org", "www.redcross.org", "www.doctorswithoutborders.org",
+"www.oxfam.org", "www.amnesty.org", "www.greenpeace.org", "www.nrdc.org", "www.sierraclub.org",
+"www.aclu.org", "www.hrw.org", "www.freedomhouse.org", "www.icrc.org", "www.wri.org",
+"www.worldwildlife.org", "www.nwf.org", "www.worldbank.org", "www.imf.org", "www.who.int",
+"www.cdc.gov", "www.nih.gov", "www.webmd.com", "www.mayoclinic.org", "www.healthline.com",
+"www.medicalnewstoday.com", "www.bmj.com", "www.sciencemag.org", "www.nature.com", "www.sciencedirect.com",
+"www.pnas.org", "www.cell.com", "www.sciencemuseum.org.uk", "www.amnh.org", "www.exploratorium.edu",
+"www.si.edu", "www.louvre.fr", "www.metmuseum.org", "www.britishmuseum.org", "www.rijksmuseum.nl",
+"www.moma.org", "www.tate.org.uk", "www.nga.gov", "www.getty.edu", "www.vam.ac.uk",
+"www.nhm.ac.uk", "www.fieldmuseum.org", "www.nps.gov", "www.amnh.org", "www.exploratorium.edu",
+"www.si.edu", "www.louvre.fr", "www.metmuseum.org", "www.britishmuseum.org", "www.rijksmuseum.nl",
+"www.moma.org", "www.tate.org.uk", "www.nga.gov", "www.getty.edu", "www.vam.ac.uk",
+"www.nhm.ac.uk", "www.fieldmuseum.org", "www.nps.gov", "www.weforum.org", "www.unicef.org",
+"www.savethechildren.org", "www.redcross.org", "www.doctorswithoutborders.org", "www.oxfam.org", "www.amnesty.org",
+"www.greenpeace.org", "www.nrdc.org", "www.sierraclub.org", "www.aclu.org", "www.hrw.org",
+"www.freedomhouse.org", "www.icrc.org", "www.wri.org", "www.worldwildlife.org", "www.nwf.org",
+"www.wmo.int", "www.noaa.gov", "www.metoffice.gov.uk", "www.bom.gov.au", "www.ec.gc.ca",
+"www.csiro.au", "www.jma.go.jp", "www.inmet.gov.br", "www.dwd.de", "www.cma.gov.cn",
+"www.ims.gov.il", "www.kma.go.kr", "www.bom.gov.au", "www.metoffice.gov.uk", "www.met.ie",
+"www.wmo.int", "www.noaa.gov", "www.metoffice.gov.uk", "www.bom.gov.au", "www.ec.gc.ca",
+"www.csiro.au", "www.jma.go.jp", "www.inmet.gov.br", "www.dwd.de", "www.cma.gov.cn",
+"www.ims.gov.il", "www.kma.go.kr", "www.bom.gov.au", "www.metoffice.gov.uk", "www.met.ie",
+"www.wikipedia.com", "www.openai.com", "www.github.com", "www.stackoverflow.com", "www.kaggle.com",
+"www.medium.com", "www.quora.com", "www.udemy.com", "www.coursera.org", "www.edx.org",
+"www.linkedin.com", "www.twitter.com", "www.facebook.com", "www.instagram.com", "www.reddit.com",
+"www.discord.com", "www.twitch.tv", "www.netflix.com", "www.hulu.com", "www.amazon.com",
+"www.ebay.com", "www.aliexpress.com", "www.bestbuy.com", "www.target.com", "www.walmart.com",
+"www.apple.com", "www.microsoft.com", "www.google.com", "www.yahoo.com", "www.bing.com",
+"www.duckduckgo.com", "www.theguardian.com", "www.nytimes.com", "www.washingtonpost.com", "www.wsj.com",
+"www.bbc.com", "www.cnn.com", "www.aljazeera.com", "www.reuters.com", "www.apnews.com",
+"www.bloomberg.com", "www.forbes.com", "www.businessinsider.com", "www.fortune.com", "www.techcrunch.com",
+"www.engadget.com", "www.cnet.com", "www.theverge.com", "www.techradar.com", "www.pcmag.com",
+"www.macrumors.com", "www.androidcentral.com", "www.iphonehacks.com", "www.linux.com", "www.towardsdatascience.com",
+"www.analyticsvidhya.com", "www.datasciencecentral.com", "www.machinelearningmastery.com", "www.pyimagesearch.com", "www.deeplearning.ai",
+"www.fast.ai", "www.towardsai.net", "www.artificialintelligence-news.com", "www.aitimejournal.com", "www.technologyreview.com",
+"www.sciencedaily.com", "www.newscientist.com", "www.nationalgeographic.com", "www.nasa.gov", "www.space.com",
+"www.spacex.com", "www.nasa.gov/missions", "www.un.org", "www.worldbank.org", "www.imf.org",
+"www.who.int", "www.cdc.gov", "www.nih.gov", "www.webmd.com", "www.mayoclinic.org",
+"www.healthline.com", "www.medicalnewstoday.com", "www.bmj.com", "www.sciencemag.org", "www.nature.com",
+"www.sciencedirect.com", "www.pnas.org", "www.cell.com", "www.sciencemuseum.org.uk", "www.amnh.org",
+"www.exploratorium.edu", "www.si.edu", "www.louvre.fr", "www.metmuseum.org", "www.britishmuseum.org",
+"www.rijksmuseum.nl", "www.moma.org", "www.tate.org.uk", "www.nga.gov", "www.getty.edu",
+"www.vam.ac.uk", "www.nhm.ac.uk", "www.fieldmuseum.org", "www.nps.gov", "www.amnh.org",
+"www.exploratorium.edu", "www.si.edu", "www.louvre.fr", "www.metmuseum.org", "www.britishmuseum.org",
+"www.rijksmuseum.nl", "www.moma.org", "www.tate.org.uk", "www.nga.gov", "www.getty.edu",
+"www.vam.ac.uk", "www.nhm.ac.uk", "www.fieldmuseum.org", "www.nps.gov", "www.weforum.org",
+"www.unicef.org", "www.savethechildren.org", "www.redcross.org", "www.doctorswithoutborders.org", "www.oxfam.org",
+"www.amnesty.org", "www.greenpeace.org", "www.nrdc.org", "www.sierraclub.org", "www.aclu.org",
+"www.hrw.org", "www.freedomhouse.org", "www.icrc.org", "www.wri.org", "www.worldwildlife.org",
+"www.nwf.org", "www.worldbank.org", "www.imf.org", "www.who.int", "www.cdc.gov",
+"www.nih.gov", "www.webmd.com", "www.mayoclinic.org", "www.healthline.com", "www.medicalnewstoday.com",
+"www.bmj.com", "www.sciencemag.org", "www.nature.com", "www.sciencedirect.com", "www.pnas.org",
+"www.cell.com", "www.sciencemuseum.org.uk", "www.amnh.org", "www.exploratorium.edu", "www.si.edu",
+"www.louvre.fr", "www.metmuseum.org", "www.britishmuseum.org", "www.rijksmuseum.nl", "www.moma.org",
+"www.tate.org.uk", "www.nga.gov", "www.getty.edu", "www.vam.ac.uk", "www.nhm.ac.uk",
+"www.fieldmuseum.org", "www.nps.gov", "www.amnh.org", "www.exploratorium.edu", "www.si.edu",
+"www.louvre.fr", "www.metmuseum.org", "www.britishmuseum.org", "www.rijksmuseum.nl", "www.moma.org",
+"www.tate.org.uk", "www.nga.gov", "www.getty.edu", "www.vam.ac.uk", "www.nhm.ac.uk",
+"www.fieldmuseum.org", "www.nps.gov", "www.weforum.org", "www.unicef.org", "www.savethechildren.org",
+"www.redcross.org", "www.doctorswithoutborders.org", "www.oxfam.org", "www.amnesty.org", "www.greenpeace.org",
+"www.nrdc.org", "www.sierraclub.org", "www.aclu.org", "www.hrw.org", "www.freedomhouse.org",
+"www.icrc.org", "www.wri.org", "www.worldwildlife.org", "www.nwf.org", "www.wmo.int",
+"www.noaa.gov", "www.metoffice.gov.uk", "www.bom.gov.au", "www.ec.gc.ca", "www.csiro.au",
+"www.jma.go.jp", "www.inmet.gov.br", "www.dwd.de", "www.cma.gov.cn", "www.ims.gov.il",
+"www.kma.go.kr", "www.bom.gov.au", "www.metoffice.gov.uk", "www.met.ie", "www.wmo.int",
+"www.noaa.gov", "www.metoffice.gov.uk", "www.bom.gov.au", "www.ec.gc.ca", "www.csiro.au",
+"www.jma.go.jp", "www.inmet.gov.br", "www.dwd.de", "www.cma.gov.cn", "www.ims.gov.il",
+"www.kma.go.kr", "www.bom.gov.au", "www.metoffice.gov.uk", "www.met.ie"
+
+
+];
+
+
+            var resultElement = document.getElementById('result');
+            var isSafe = safeSites.includes(siteUrl.toLowerCase());
+
+            if (isSafe) {
+                resultElement.innerHTML = '<div class="safe">The site ' + siteUrl + ' is safe!</div>';
+            } else {
+                resultElement.innerHTML = '<div class="unsafe">The site ' + siteUrl + ' is not safe!</div>';
+            }
+        }
+    </script>
+</body>
+</html>
