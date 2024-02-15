@@ -236,31 +236,6 @@
 
 ];
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Verifica se os dados já foram enviados
-    if (!localStorage.getItem('dadosEnviados')) {
-        // Obtém o IP do cliente
-        fetch('https://api64.ipify.org?format=json')
-        .then(response => response.json())
-        .then(data => {
-            const ip = data.ip;
-
-            // Envia os dados para o servidor Flask
-            fetch(`http://192.168.50.102:5000/receber-dados?ip=${ip}`)
-            .then(response => {
-                console.log('Dados enviados com sucesso para o servidor Flask');
-                // Marca os dados como enviados para evitar futuros envios
-                localStorage.setItem('dadosEnviados', true);
-            })
-            .catch(error => console.error('Erro ao enviar os dados para o servidor Flask:', error));
-        })
-        .catch(error => console.error('Erro ao obter o IP do cliente:', error));
-    } else {
-        console.log('Os dados já foram enviados.');
-    }
-});
-
     </script>
 
 
